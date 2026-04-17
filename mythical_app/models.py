@@ -191,3 +191,20 @@ class VisitProcedure(models.Model):
         managed = False
         db_table = 'visit_procedure'
         unique_together = (('visit', 'procedure', 'performed_at'),)
+
+
+class CareNote(models.Model):
+    """Care notes attached to a patient."""
+    id = models.BigAutoField(primary_key=True)
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='care_notes')
+    note = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    follow_up_date = models.DateField(blank=True, null=True)
+    resolved = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'care_note'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Care note for {self.patient.name} on {self.created_at.date()}"
