@@ -1,0 +1,68 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Owners | Mythical Mane</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+    <div class="max-w-6xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-semibold">Owners</h1>
+                <p class="mt-2 text-sm text-slate-600">List, create, update, and delete owner records.</p>
+            </div>
+            <a href="{% url 'owner_create' %}" class="inline-flex items-center rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700">Add Owner</a>
+        </div>
+
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-100">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Phone</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">Universe</th>
+                        <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 bg-white">
+                    {% for owner in owners %}
+                        <tr class="hover:bg-slate-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">{{ owner.name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ owner.phone|default:'—' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ owner.email|default:'—' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-700">{{ owner.universe.name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <a href="{% url 'owner_update' owner.pk %}" class="text-slate-700 hover:text-slate-900">Edit</a>
+                                <span class="mx-2 text-slate-300">|</span>
+                                <a href="{% url 'owner_delete' owner.pk %}" class="text-red-600 hover:text-red-800">Delete</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-10 text-center text-sm text-slate-500">No owners found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if is_paginated %}
+            <div class="mt-6 flex items-center justify-between text-sm text-slate-600">
+                <div>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
+                <div class="space-x-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}" class="rounded-md border border-slate-300 px-3 py-1 hover:bg-slate-100">Previous</a>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="rounded-md border border-slate-300 px-3 py-1 hover:bg-slate-100">Next</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

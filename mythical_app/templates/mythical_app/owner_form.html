@@ -1,0 +1,43 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if form.instance.pk %}Edit Owner{% else %}New Owner{% endif %} | Mythical Mane</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+    <div class="max-w-3xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <h1 class="text-3xl font-semibold">{% if form.instance.pk %}Edit Owner{% else %}New Owner{% endif %}</h1>
+            <p class="mt-2 text-sm text-slate-600">Complete the form to save owner information.</p>
+        </div>
+
+        <div class="rounded-xl bg-white p-8 shadow-sm border border-slate-200">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="grid gap-6">
+                    {% for field in form.visible_fields %}
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="mt-1 text-xs text-slate-500">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-8 flex gap-3">
+                    <button type="submit" class="inline-flex justify-center rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700">Save</button>
+                    <a href="{% url 'owner_list' %}" class="inline-flex justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

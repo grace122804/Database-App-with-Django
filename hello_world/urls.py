@@ -26,6 +26,10 @@ from mythical_app import views as mythical_views
 urlpatterns = [
     path("", core_views.index),
     path("patients/", mythical_views.patient_list, name="patient_list"),
+    path("owners/", mythical_views.OwnerListView.as_view(), name="owner_list"),
+    path("owners/new/", mythical_views.OwnerCreateView.as_view(), name="owner_create"),
+    path("owners/<int:pk>/edit/", mythical_views.OwnerUpdateView.as_view(), name="owner_update"),
+    path("owners/<int:pk>/delete/", mythical_views.OwnerDeleteView.as_view(), name="owner_delete"),
     path("admin/", admin.site.urls),
     path("__reload__/", include("django_browser_reload.urls")),
 ]
